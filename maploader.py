@@ -168,6 +168,15 @@ def rename_functions(symbols):
       renamed += 1
   return renamed, len(func_symbols)
 
+# def rename_data(symbols: list[Symbol]) -> tuple[int, int]:
+def rename_data(symbols):
+  renamed = 0
+  data_symbols = [s for s in symbols if len(s.flags) == 0 and s.offset > 0]
+  for symbol in data_symbols:
+    if ida_name.set_name(symbol.offset, symbol.name, ida_name.SN_FORCE):
+      renamed += 1
+  return renamed, len(data_symbols)
+
 def load_symbols():
   file_path = ida_kernwin.ask_file(False, "*.map", "Select MAP file")
   if file_path:
@@ -178,6 +187,8 @@ def load_symbols():
   map = read_map(file_path)
   renamed, func_count = rename_functions(map.symbols)
   ida_kernwin.msg("[MAP Loader][INFO] Renamed: " + str(renamed) + "/" + str(func_count) + " functions\n")
+  renamed, func_count = rename_data(map.symbols)
+  ida_kernwin.msg("[MAP Loader][INFO] Renamed: " + str(renamed) + "/" + str(func_count) + " data offsets\n")
 
 class FuncExporterPlugin(idaapi.plugin_t):
   flags = idaapi.PLUGIN_PROC
