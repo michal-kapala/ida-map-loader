@@ -177,7 +177,7 @@ def load_symbols():
     return
   map = read_map(file_path)
   renamed, func_count = rename_functions(map.symbols)
-  ida_kernwin.msg("[MAP Loader][INFO] Renamed:" + str(renamed) + "/" + str(func_count) + " functions\n")
+  ida_kernwin.msg("[MAP Loader][INFO] Renamed: " + str(renamed) + "/" + str(func_count) + " functions\n")
 
 class FuncExporterPlugin(idaapi.plugin_t):
   flags = idaapi.PLUGIN_PROC
